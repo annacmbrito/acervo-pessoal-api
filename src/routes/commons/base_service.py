@@ -14,4 +14,7 @@ class BaseService:
         return model
     
     def exists(self, condition: Any): 
-        return self.session.query(self.type).filter(condition).first() is not None
+        return self.filter(condition).first() is not None
+    
+    def filter(self, condition: Any): 
+        return self.session.query(self.type).filter(condition)
