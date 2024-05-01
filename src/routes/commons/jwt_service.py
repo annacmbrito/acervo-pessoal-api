@@ -1,4 +1,4 @@
-from jose import jwt as jwt_jose
+from jose import jwt as jwt_jose, JWTError
 
 import os
 import time
@@ -18,5 +18,15 @@ class JwtService:
                 self.EXPIRATION_KEY: round(time.time() * 1000) + self.JWT_EXPIRATION_IN_MILLISECONDS,
             }
         )
+    
+    def get_claims(self, token: str):
+        try:
+            return jwt_jose.decode(
+                token, 
+                key=self.JWT_SECRET, 
+                algorithms=["HS256"]
+            )
+        except JWTError:
+            raise ValueError("Invalid token")
 
 jwt = JwtService()
