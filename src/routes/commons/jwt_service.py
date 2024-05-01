@@ -18,6 +18,24 @@ class JwtService:
                 self.EXPIRATION_KEY: round(time.time() * 1000) + self.JWT_EXPIRATION_IN_MILLISECONDS,
             }
         )
+        
+    def get_user_email(self, token: str):
+        return self.get_claim(token, self.USER_EMAIL_KEY)
+    
+    def get_claim(self, token: str, claim: str):
+            claims = self.get_claims(token)
+
+            expiration_time = claims.get(self.EXPIRATION_KEY, 0)
+            current_time = round(time.time() * 1000)
+
+            if expiration_time < current_time:
+                raise ValueError("Token expired")
+            
+            result = claims.get(claim)
+            
+            if result is None:
+                raise ValueError("Invalid token")
+            return result
     
     def get_claims(self, token: str):
         try:
