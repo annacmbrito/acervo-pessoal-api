@@ -11,3 +11,9 @@ class UserService(BaseService):
         if(super().exists(User.email == user.email)):
             raise HTTPException(status_code=status.HTTP_409_CONFLICT, detail="Email already exists")
         return super().save(user)
+    
+    def find_by_email(self, email: str):
+        user = super().filter(User.email == email).first()
+        if(user is None):
+            raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="User not found")
+        return user
