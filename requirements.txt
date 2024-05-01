@@ -1,5 +1,6 @@
 annotated-types==0.6.0
 anyio==4.3.0
+bcrypt==4.1.2
 click==8.1.7
 dnspython==2.6.1
 email_validator==2.1.1
@@ -9,6 +10,7 @@ greenlet==3.0.3
 h11==0.14.0
 httptools==0.6.1
 idna==3.7
+passlib==1.7.4
 psycopg2==2.9.9
 pydantic==2.7.1
 pydantic_core==2.18.2
