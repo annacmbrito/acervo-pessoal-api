@@ -15,3 +15,8 @@ class SaveUserRequest(BaseModel):
         user.email = self.email
         user.password = hash_password(self.password)
         return user
+
+class CurrentUserResponse(BaseModel):
+    first_name: str
+    last_name: str
+    email: str
