@@ -6,3 +6,9 @@ class Author(Base):
 
     id = Column(Integer, primary_key=True)
     name = Column(String(length=32))
+
+class Language(Base):
+    __tablename__ = 'language'
+
+    id = Column(Integer, primary_key=True)
+    name = Column(String(length=32))
