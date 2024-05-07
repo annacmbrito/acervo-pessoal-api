@@ -8,15 +8,21 @@ async def validate_token(request: Request, call_next):
     bearer = request.headers.get('Authorization')
 
     white_list = [
-        {"method": "GET", "path": "/"},
-        {"method": "GET", "path": "/docs/"},
-        {"method": "GET", "path": "/openapi.json/"},
-        {"method": "POST", "path": "/api/v1/auth/"},
-        {"method": "POST", "path": "/api/v1/users/"}
+        {"methods": ["OPTIONS", "GET"], "path": "/"},
+        {"methods": ["OPTIONS", "GET"], "path": "/docs/"},
+        {"methods": ["OPTIONS", "GET"], "path": "/openapi.json/"},
+        {"methods": ["OPTIONS", "POST"], "path": "/api/v1/auth/"},
+        {"methods": ["OPTIONS", "POST"], "path": "/api/v1/users/"}
     ]
 
-    if {"method": method, "path": path} not in white_list:
+    permitted = False
 
+    for route in white_list:
+        if(method in route["methods"] and path == route["path"]):
+            permitted = True
+            break
+
+    if not permitted:
         if not bearer or not bearer.lower().startswith('bearer '):
             return JSONResponse(
                 status_code=status.HTTP_401_UNAUTHORIZED,
