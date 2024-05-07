@@ -10,6 +10,7 @@ async def validate_token(request: Request, call_next):
     white_list = [
         {"method": "GET", "path": "/"},
         {"method": "GET", "path": "/docs/"},
+        {"method": "GET", "path": "/openapi.json/"},
         {"method": "POST", "path": "/api/v1/auth/"},
         {"method": "POST", "path": "/api/v1/users/"}
     ]
