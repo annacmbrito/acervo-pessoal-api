@@ -23,4 +23,9 @@ def get_logged_user(user_email: str = Depends(get_current_user),
 
 @router.post("/", status_code=status.HTTP_201_CREATED)
 def save_user(request: SaveUserRequest, session: Session = Depends(get_db_session)):
-    return UserService(session).save(request.to_model())
+    user = UserService(session).save(request.to_model())
+    return CurrentUserResponse(
+        first_name=user.first_name,
+        last_name=user.last_name,
+        email=user.email
+    )
