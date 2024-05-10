@@ -18,3 +18,6 @@ class BaseService:
     
     def filter(self, condition: Any): 
         return self.session.query(self.type).filter(condition)
+    
+    def find_all(self):
+        return self.session.query(self.type).all()
