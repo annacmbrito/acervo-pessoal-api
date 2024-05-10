@@ -12,7 +12,7 @@ router = APIRouter(
 )
 
 @router.get("/")
-def find_all(page: Page, session: Session = Depends(get_db_session)):
+def find_all(page: Page = Depends(), session: Session = Depends(get_db_session)):
     return AuthorService(session).find_all(page)
 
 @router.post("/", status_code=status.HTTP_201_CREATED)
