@@ -1,5 +1,6 @@
 from typing import Any, Type
 from sqlalchemy.orm import Session
+from src.routes.commons.schemas import Page
 from src.config.database import Base
 
 class BaseService:
@@ -19,5 +20,10 @@ class BaseService:
     def filter(self, condition: Any): 
         return self.session.query(self.type).filter(condition)
     
-    def find_all(self):
-        return self.session.query(self.type).all()
+    def find_all(self, page: Page):
+        result = self.session.query(self.type)
+        page.number_of_elements = result.count()
+        if(page.size >= 0):
+            result = result.limit(page.size)
+        page.content = result.offset(page.offset).all()
+        return page.model_dump()
