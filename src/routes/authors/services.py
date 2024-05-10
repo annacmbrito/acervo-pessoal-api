@@ -8,3 +8,6 @@ class AuthorService(BaseService):
 
     def find_all(self):
         return super().find_all()
+    
+    def save(self, author: Author):
+        return super().save(author)
