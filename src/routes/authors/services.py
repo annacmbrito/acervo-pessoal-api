@@ -5,3 +5,6 @@ from src.routes.authors.models import Author
 class AuthorService(BaseService):
     def __init__(self, session: Session):
         super().__init__(session, Author)
+
+    def find_all(self):
+        return super().find_all()
