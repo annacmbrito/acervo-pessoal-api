@@ -21,7 +21,9 @@ class BaseService:
         return self.session.query(self.type).filter(condition)
     
     def find_all(self, page: Page):
-        result = self.session.query(self.type)
+        order_column = getattr(self.type, page.sort_by)
+        query_order = order_column.asc() if page.order == 'ASC' else order_column.desc()
+        result = self.session.query(self.type).order_by(query_order)
         page.number_of_elements = result.count()
         if(page.size >= 0):
             result = result.limit(page.size)
