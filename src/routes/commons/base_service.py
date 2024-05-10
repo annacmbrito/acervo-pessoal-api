@@ -26,6 +26,6 @@ class BaseService:
         result = self.session.query(self.type).order_by(query_order)
         page.number_of_elements = result.count()
         if(page.size >= 0):
-            result = result.limit(page.size)
-        page.content = result.offset(page.offset).all()
+            result = result.limit(page.size).offset(page.size * page.offset)
+        page.content = result.all()
         return page.model_dump()
