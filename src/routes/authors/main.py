@@ -10,6 +10,10 @@ router = APIRouter(
     responses={ 404: { "description": "Not found" } }
 )
 
+@router.get("/")
+def find_all(session: Session = Depends(get_db_session)):
+    return AuthorService(session).find_all()
+
 @router.post("/", status_code=status.HTTP_201_CREATED)
 def save_user(request: SaveAuthorRequest, session: Session = Depends(get_db_session)):
     return AuthorService(session).save(request.to_model())
