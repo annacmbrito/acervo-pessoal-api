@@ -12,3 +12,6 @@ class AuthorService(BaseService):
     
     def save(self, author: Author):
         return super().save(author)
+    
+    def delete_by_id(self, id: int):
+        return super().delete_by_id(id)
