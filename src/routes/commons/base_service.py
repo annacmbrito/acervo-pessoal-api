@@ -1,6 +1,6 @@
 from typing import Any, Type
 from sqlalchemy.orm import Session
-from src.routes.commons.schemas import Page
+from src.routes.commons.schemas import OrderDirection, Page
 from src.config.database import Base
 
 class BaseService:
@@ -25,7 +25,7 @@ class BaseService:
         page.number_of_elements = result.count()
         if page.sort_by is not None:
             order_column = getattr(self.type, page.sort_by)
-            query_order = order_column.asc() if page.order == 'ASC' else order_column.desc()
+            query_order = order_column.asc() if page.order == OrderDirection.ASC else order_column.desc()
             result = result.order_by(query_order)
         if page.size is not None and page.size >= 0:
             result = result.limit(page.size).offset(page.size * page.offset)
