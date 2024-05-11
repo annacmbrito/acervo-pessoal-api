@@ -12,3 +12,6 @@ class CategoryService(BaseService):
 
     def save(self, category: Category):
         return super().save(category)
+    
+    def delete_by_id(self, id: int):
+        return super().delete_by_id(id)
