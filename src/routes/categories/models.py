@@ -9,4 +9,4 @@ class Category(Base):
     name = Column(String(length=32))
 
     books = relationship("Book", back_populates="category")
-    subcategories = relationship("Subcategory", back_populates="category")
+    subcategories = relationship("Subcategory", back_populates="category", cascade="all, delete")
