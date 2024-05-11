@@ -34,6 +34,14 @@ class BaseService:
         page.content = result.all()
         return page.model_dump()
     
+    def update_by_id(self, id: int, model: Any):
+        record = self.filter(self.type.id == id).first()
+        if record is not None:
+            for key, value in vars(model).items():
+                if not key.startswith('_') and hasattr(self.type, key):
+                    setattr(record, key, value)
+            self.session.commit()
+    
     def delete_by_id(self, id: int):
         record = self.filter(self.type.id == id).first()
         self.session.delete(record)
