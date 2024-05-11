@@ -12,3 +12,6 @@ class BookService(BaseService):
 
     def find_all(self, page: Page):
         return super().find_all(page)
+    
+    def delete_by_id(self, id: int):
+        return super().delete_by_id(id)
