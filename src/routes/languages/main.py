@@ -18,3 +18,7 @@ def find_all(page: Page = Depends(), session: Session = Depends(get_db_session))
 @router.post("/", status_code=status.HTTP_201_CREATED)
 def save_user(request: SaveLanguageRequest, session: Session = Depends(get_db_session)):
     return LanguageService(session).save(request.to_model())
+
+@router.delete("/{id}")
+def delete_by_id(id: int, session: Session = Depends(get_db_session)):
+    LanguageService(session).delete_by_id(id)
