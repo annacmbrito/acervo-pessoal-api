@@ -20,3 +20,7 @@ def find_all(filter: SubcategoryFilter = Depends(),
 @router.post("/", status_code=status.HTTP_201_CREATED)
 def save_user(request: SaveSubcategoryRequest, session: Session = Depends(get_db_session)):
     return SubcategoryService(session).save(request.to_model())
+
+@router.delete("/{id}")
+def delete_by_id(id: int, session: Session = Depends(get_db_session)):
+    SubcategoryService(session).delete_by_id(id)
