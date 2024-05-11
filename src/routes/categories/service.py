@@ -9,3 +9,6 @@ class CategoryService(BaseService):
 
     def find_all(self, page: Page):
         return super().find_all(page)
+
+    def save(self, category: Category):
+        return super().save(category)
