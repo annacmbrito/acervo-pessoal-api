@@ -33,3 +33,8 @@ class BaseService:
             result = result.limit(page.size).offset(page.size * page.offset)
         page.content = result.all()
         return page.model_dump()
+    
+    def delete_by_id(self, id: int):
+        record = self.filter(self.type.id == id).first()
+        self.session.delete(record)
+        self.session.commit()
