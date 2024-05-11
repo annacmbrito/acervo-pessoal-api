@@ -20,8 +20,10 @@ class BaseService:
     def filter(self, condition: Any): 
         return self.session.query(self.type).filter(condition)
     
-    def find_all(self, page: Page):
+    def find_all(self, page: Page, filter: Any | None = None):
         result = self.session.query(self.type)
+        if filter is not None:
+            result = result.filter(*filter)
         page.number_of_elements = result.count()
         if page.sort_by is not None:
             order_column = getattr(self.type, page.sort_by)
