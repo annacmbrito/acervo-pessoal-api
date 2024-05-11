@@ -1,5 +1,5 @@
 from pydantic import BaseModel, Field
-from typing import List, Any
+from typing import List, Any, Union
 from enum import Enum
 
 class OrderDirection(Enum):
@@ -7,7 +7,7 @@ class OrderDirection(Enum):
     DESC = 'DESC'
 
 class Page(BaseModel):
-    size:int
+    size:int | None = None
     offset:int = Field(0, ge=0)
     sort_by:str
     order: OrderDirection

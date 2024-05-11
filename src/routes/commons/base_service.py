@@ -27,7 +27,7 @@ class BaseService:
             order_column = getattr(self.type, page.sort_by)
             query_order = order_column.asc() if page.order == 'ASC' else order_column.desc()
             result = result.order_by(query_order)
-        if page.size >= 0:
+        if page.size is not None and page.size >= 0:
             result = result.limit(page.size).offset(page.size * page.offset)
         page.content = result.all()
         return page.model_dump()
