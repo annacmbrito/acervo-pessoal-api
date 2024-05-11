@@ -2,7 +2,7 @@ from fastapi import HTTPException, status
 from sqlalchemy.orm import Session
 from src.routes.auth.schemas import *
 from src.routes.commons.jwt_service import jwt
-from src.routes.users.services import UserService
+from src.routes.users.service import UserService
 from src.util.hash_password import are_equals_passwords
 
 class AuthService:

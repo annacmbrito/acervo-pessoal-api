@@ -2,7 +2,7 @@ from fastapi import APIRouter, Depends, status
 from sqlalchemy.orm import Session
 from src.config.database import get_db_session
 from src.routes.books.schemas import SaveBookRequest
-from src.routes.books.services import BookService
+from src.routes.books.service import BookService
 
 router = APIRouter(
     prefix="/api/v1/books", 

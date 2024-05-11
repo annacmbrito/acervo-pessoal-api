@@ -3,7 +3,7 @@ from sqlalchemy.orm import Session
 from src.routes.commons.schemas import Page
 from src.config.database import get_db_session
 from src.routes.authors.schemas import SaveAuthorRequest
-from src.routes.authors.services import AuthorService
+from src.routes.authors.service import AuthorService
 
 router = APIRouter(
     prefix="/api/v1/authors", 
