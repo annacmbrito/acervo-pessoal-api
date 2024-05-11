@@ -5,3 +5,6 @@ from src.routes.subcategories.models import Subcategory
 class SubcategoryService(BaseService):
     def __init__(self, session: Session):
         super().__init__(session, Subcategory)
+
+    def save(self, book: Subcategory):
+        return super().save(book)
