@@ -12,3 +12,6 @@ class LanguageService(BaseService):
 
     def save(self, language: Language):
         return super().save(language)
+    
+    def delete_by_id(self, id: int):
+        return super().delete_by_id(id)
