@@ -44,5 +44,6 @@ class BaseService:
     
     def delete_by_id(self, id: int):
         record = self.filter(self.type.id == id).first()
-        self.session.delete(record)
-        self.session.commit()
+        if record is not None:
+            self.session.delete(record)
+            self.session.commit()
