@@ -9,6 +9,7 @@ from src.routes.auth.main import router as auth_router
 from src.routes.authors.main import router as authors_router
 from src.routes.books.main import router as books_router
 from src.routes.categories.main import router as categories_router
+from src.routes.subcategories.main import router as subcategories_router
 from src.routes.languages.main import router as languages_router
 from src.routes.users.main import router as users_router
 from src.config.security import validate_token
@@ -18,6 +19,7 @@ app.include_router(auth_router)
 app.include_router(authors_router)
 app.include_router(books_router)
 app.include_router(categories_router)
+app.include_router(subcategories_router)
 app.include_router(languages_router)
 app.include_router(users_router)
 
