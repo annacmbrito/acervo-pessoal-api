@@ -13,3 +13,6 @@ class SubcategoryService(BaseService):
 
     def save(self, book: Subcategory):
         return super().save(book)
+    
+    def delete_by_id(self, id: int):
+        return super().delete_by_id(id)
