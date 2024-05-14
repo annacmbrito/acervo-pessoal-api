@@ -13,10 +13,12 @@ class Book(Base):
     available = Column(Boolean)
     author_id = Column(Integer, ForeignKey('author.id'))
     language_id = Column(Integer, ForeignKey('language.id'))
+    publisher_id = Column(Integer, ForeignKey('publisher.id'))
     category_id = Column(Integer, ForeignKey('category.id'))
     subcategory_id = Column(Integer, ForeignKey('subcategory.id'))
 
     author = relationship("Author", back_populates="books")
     language = relationship("Language", back_populates="books")
+    publisher = relationship("Publisher", back_populates="books")
     category = relationship("Category", back_populates="books")
     subcategory = relationship("Subcategory", back_populates="books")
