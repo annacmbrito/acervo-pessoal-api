@@ -12,3 +12,6 @@ class PublisherService(BaseService):
 
     def save(self, publisher: Publisher):
         return super().save(publisher)
+    
+    def delete_by_id(self, id: int):
+        return super().delete_by_id(id)
