@@ -9,3 +9,6 @@ class PublisherService(BaseService):
 
     def find_all(self, page: Page):
         return super().find_all(page)
+
+    def save(self, publisher: Publisher):
+        return super().save(publisher)
