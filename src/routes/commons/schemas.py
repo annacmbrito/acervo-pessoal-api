@@ -1,5 +1,5 @@
 from pydantic import BaseModel, Field
-from typing import List, Any, Union
+from typing import List, Any
 from enum import Enum
 
 class OrderDirection(Enum):
@@ -9,7 +9,7 @@ class OrderDirection(Enum):
 class Page(BaseModel):
     size:int | None = None
     offset:int = Field(0, ge=0)
-    sort_by:str = 'id'
-    order: OrderDirection = OrderDirection.ASC
+    order_by:str = 'id'
+    order_direction: OrderDirection = OrderDirection.ASC
     number_of_elements: int = 0
     content:List[Any] = []

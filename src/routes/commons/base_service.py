@@ -25,9 +25,9 @@ class BaseService:
         if filter is not None:
             result = result.filter(*filter)
         page.number_of_elements = result.count()
-        if page.sort_by is not None:
-            order_column = getattr(self.type, page.sort_by)
-            query_order = order_column.asc() if page.order == OrderDirection.ASC else order_column.desc()
+        if page.order_by is not None:
+            order_column = getattr(self.type, page.order_by)
+            query_order = order_column.asc() if page.order_direction == OrderDirection.ASC else order_column.desc()
             result = result.order_by(query_order)
         if page.size is not None and page.size >= 0:
             result = result.limit(page.size).offset(page.size * page.offset)
