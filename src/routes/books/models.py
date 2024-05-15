@@ -1,16 +1,17 @@
 from src.config.database import Base
-from sqlalchemy import Column, ForeignKey, String, Integer, Boolean
+from sqlalchemy import Column, ForeignKey, String, Integer
 from sqlalchemy.orm import relationship
 
 class Book(Base):
     __tablename__ = 'book'
 
     id = Column(Integer, primary_key=True)
-    name = Column(String(length=32))
+    name = Column(String(length=128))
     description = Column(String)
     comment = Column(String)
+    pages = Column(Integer)
     rating = Column(Integer)
-    available = Column(Boolean)
+    status = Column(String(length=32))
     author_id = Column(Integer, ForeignKey('author.id'))
     language_id = Column(Integer, ForeignKey('language.id'))
     publisher_id = Column(Integer, ForeignKey('publisher.id'))
