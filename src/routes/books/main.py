@@ -3,7 +3,7 @@ from sqlalchemy.orm import Session
 from src.routes.commons.schemas import Page
 from src.config.database import get_db_session
 from src.routes.books.schemas import SaveBookRequest
-from src.routes.books.service import BookService
+from src.routes.books.service import Book, BookService
 
 router = APIRouter(
     prefix="/api/v1/books", 
@@ -14,6 +14,10 @@ router = APIRouter(
 @router.get("/")
 def find_all(page: Page = Depends(), session: Session = Depends(get_db_session)):
     return BookService(session).find_all(page)
+
+@router.get("/{id}")
+def find_by_id(id: int, session: Session = Depends(get_db_session)):
+    return BookService(session).filter(Book.id == id).first()
 
 @router.post("/", status_code=status.HTTP_201_CREATED)
 def save_user(request: SaveBookRequest, session: Session = Depends(get_db_session)):
