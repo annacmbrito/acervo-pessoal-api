@@ -17,7 +17,7 @@ def find_all(page: Page = Depends(), session: Session = Depends(get_db_session))
 
 @router.post("/", status_code=status.HTTP_201_CREATED)
 def save_user(request: SaveBookRequest, session: Session = Depends(get_db_session)):
-    return BookService(session).save(request.to_model())
+    return BookService(session).save(request)
 
 @router.put("/{id}")
 def update_by_id(id: int, 
