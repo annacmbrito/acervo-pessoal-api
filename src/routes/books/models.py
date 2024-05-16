@@ -18,8 +18,8 @@ class Book(Base):
     category_id = Column(Integer, ForeignKey('category.id'))
     subcategory_id = Column(Integer, ForeignKey('subcategory.id'))
 
-    author = relationship("Author", back_populates="books")
-    language = relationship("Language", back_populates="books")
-    publisher = relationship("Publisher", back_populates="books")
-    category = relationship("Category", back_populates="books")
-    subcategory = relationship("Subcategory", back_populates="books")
+    author = relationship("Author", back_populates="books", lazy=False)
+    language = relationship("Language", back_populates="books", lazy=False)
+    publisher = relationship("Publisher", back_populates="books", lazy=False)
+    category = relationship("Category", back_populates="books", lazy=False)
+    subcategory = relationship("Subcategory", back_populates="books", lazy=False)
