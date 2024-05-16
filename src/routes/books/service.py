@@ -1,3 +1,4 @@
+from fastapi import HTTPException, status
 from sqlalchemy.orm import Session
 from src.routes.commons.schemas import Page
 from src.routes.commons.base_service import BaseService
@@ -26,8 +27,11 @@ class BookService(BaseService):
         return super().find_all(page)
     
     def update_by_id(self, id: int, request: SaveBookRequest):
-        book = self.convert_to_book(request)
-        return super().update_by_id(id, book)
+        try:
+            book = self.convert_to_book(request)
+            return super().update_by_id(id, book)
+        except ValueError:
+            raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Book not found")
     
     def delete_by_id(self, id: int):
         return super().delete_by_id(id)

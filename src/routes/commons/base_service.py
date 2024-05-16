@@ -36,7 +36,9 @@ class BaseService:
     
     def update_by_id(self, id: int, model: Any):
         record = self.filter(self.type.id == id).first()
-        if record is not None:
+        if record is None:
+            raise ValueError('Record not found')
+        else:
             for key, value in vars(model).items():
                 if not key.startswith('_') and hasattr(self.type, key):
                     setattr(record, key, value)
