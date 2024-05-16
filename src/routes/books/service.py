@@ -22,6 +22,12 @@ class BookService(BaseService):
     def save(self, request: SaveBookRequest):
         book = self.convert_to_book(request)
         return super().save(book)
+    
+    def find_by_id(self, id: int):
+        book = super().filter(Book.id == id).first()
+        if book is not None:
+            return book
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Book not found")
 
     def find_all(self, page: Page):
         return super().find_all(page)
