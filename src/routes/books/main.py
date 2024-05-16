@@ -27,7 +27,7 @@ def save_user(request: SaveBookRequest, session: Session = Depends(get_db_sessio
 def update_by_id(id: int, 
                  request: SaveBookRequest,
                  session: Session = Depends(get_db_session)):
-    BookService(session).update_by_id(id, request.to_model())
+    BookService(session).update_by_id(id, request)
 
 @router.delete("/{id}")
 def delete_by_id(id: int, session: Session = Depends(get_db_session)):

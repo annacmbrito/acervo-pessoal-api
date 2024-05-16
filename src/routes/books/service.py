@@ -25,7 +25,8 @@ class BookService(BaseService):
     def find_all(self, page: Page):
         return super().find_all(page)
     
-    def update_by_id(self, id: int, book: Book):
+    def update_by_id(self, id: int, request: SaveBookRequest):
+        book = self.convert_to_book(request)
         return super().update_by_id(id, book)
     
     def delete_by_id(self, id: int):
