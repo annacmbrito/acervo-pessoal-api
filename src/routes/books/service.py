@@ -19,6 +19,19 @@ class BookService(BaseService):
         self.subcategory_service = SubcategoryService(session)
 
     def save(self, request: SaveBookRequest):
+        book = self.convert_to_book(request)
+        return super().save(book)
+
+    def find_all(self, page: Page):
+        return super().find_all(page)
+    
+    def update_by_id(self, id: int, book: Book):
+        return super().update_by_id(id, book)
+    
+    def delete_by_id(self, id: int):
+        return super().delete_by_id(id)
+    
+    def convert_to_book(self, request: SaveBookRequest):
         book = request.to_model()
 
         author = self.author_service.filter(Author.name == request.author).first()
@@ -63,14 +76,4 @@ class BookService(BaseService):
         else:
             book.subcategory_id = subcategory.id
 
-        return super().save(book)
-        
-
-    def find_all(self, page: Page):
-        return super().find_all(page)
-    
-    def update_by_id(self, id: int, book: Book):
-        return super().update_by_id(id, book)
-    
-    def delete_by_id(self, id: int):
-        return super().delete_by_id(id)
+        return book
