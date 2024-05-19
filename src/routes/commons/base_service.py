@@ -25,7 +25,7 @@ class BaseService:
         result = self.__apply_joins(result, joins)
         result = self.__apply_filters(result, filter)
         page.number_of_elements = result.count()
-        result = self.__apply_ordering(result, page, joins)
+        result = self.__apply_ordering(result, page)
         result = self.__apply_pagination(result, page)
         page.content = result.all()
         return page.model_dump()
@@ -41,20 +41,23 @@ class BaseService:
             query = query.filter(*filters)
         return query
     
-    def __apply_ordering(self, query, page, joins):
+    def __apply_ordering(self, query, page):
         if page.order_by:
-            order_column = self.__get_order_column(page.order_by, joins)
+            order_column = self.__get_order_column(page.order_by)
             query_order = order_column.asc() if page.order_direction == OrderDirection.ASC else order_column.desc()
             query = query.order_by(query_order)
         return query
 
-    def __get_order_column(self, order_by, joins):
+    def __get_order_column(self, order_by):
         if '.' in order_by:
-            column_name = order_by.split('.')[1]
-            for join in joins:
-                if hasattr(join, column_name):
-                    return getattr(join, column_name)
-        return getattr(self.type, order_by)
+            relations = order_by.split('.')
+            column_name = relations.pop()
+            current_model = self.type
+            for relation in relations:
+                current_model = getattr(current_model, relation).property.mapper.class_
+            return getattr(current_model, column_name)
+        else:
+            return getattr(self.type, order_by)
 
     def __apply_pagination(self, query, page):
         if page.size and page.size >= 0:
