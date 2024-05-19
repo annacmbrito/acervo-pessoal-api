@@ -2,8 +2,8 @@ from fastapi import APIRouter, Depends, status
 from sqlalchemy.orm import Session
 from src.routes.commons.schemas import Page
 from src.config.database import get_db_session
-from src.routes.books.schemas import SaveBookRequest
-from src.routes.books.service import Book, BookService
+from src.routes.books.schemas import *
+from src.routes.books.service import BookService
 
 router = APIRouter(
     prefix="/api/v1/books", 
@@ -12,8 +12,10 @@ router = APIRouter(
 )
 
 @router.get("/")
-def find_all(page: Page = Depends(), session: Session = Depends(get_db_session)):
-    return BookService(session).find_all(page)
+def find_all(page: Page = Depends(), 
+             filter: BookFilter = Depends(), 
+             session: Session = Depends(get_db_session)):
+    return BookService(session).find_all(filter, page)
 
 @router.get("/{id}")
 def find_by_id(id: int, session: Session = Depends(get_db_session)):
