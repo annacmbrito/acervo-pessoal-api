@@ -29,8 +29,8 @@ class BookService(BaseService):
             return book
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Book not found")
 
-    def find_all(self, page: Page):
-        return super().find_all(page)
+    def find_all(self, filter: BookFilter, page: Page):
+        return super().find_all(page, filter.condition(), [Author, Language, Publisher, Category, Subcategory])
     
     def update_by_id(self, id: int, request: SaveBookRequest):
         try:
