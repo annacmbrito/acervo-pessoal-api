@@ -26,8 +26,7 @@ class BaseService:
         result = self.__apply_filters(result, filter)
         page.number_of_elements = result.count()
         result = self.__apply_ordering(result, page, joins)
-        if page.size is not None and page.size >= 0:
-            result = result.limit(page.size).offset(page.size * page.offset)
+        result = self.__apply_pagination(result, page)
         page.content = result.all()
         return page.model_dump()
     
@@ -56,6 +55,11 @@ class BaseService:
                 if hasattr(join, column_name):
                     return getattr(join, column_name)
         return getattr(self.type, order_by)
+
+    def __apply_pagination(self, query, page):
+        if page.size and page.size >= 0:
+            query = query.limit(page.size).offset(page.size * page.offset)
+        return query
     
     def update_by_id(self, id: int, model: Any):
         record = self.filter(self.type.id == id).first()
