@@ -23,8 +23,7 @@ class BaseService:
     def find_all(self, page: Page, filter: Any | None = None, joins: Any | None = None):
         result = self.session.query(self.type)
         result = self.__apply_joins(result, joins)
-        if filter is not None:
-            result = result.filter(*filter)
+        result = self.__apply_filters(result, filter)
         page.number_of_elements = result.count()
         if page.order_by is not None:
             order_column = getattr(self.type, page.order_by)
@@ -39,6 +38,11 @@ class BaseService:
         if joins:
             for table in joins:
                 query = query.join(table)
+        return query
+
+    def __apply_filters(self, query, filters):
+        if filters:
+            query = query.filter(*filters)
         return query
     
     def update_by_id(self, id: int, model: Any):
