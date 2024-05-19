@@ -25,10 +25,7 @@ class BaseService:
         result = self.__apply_joins(result, joins)
         result = self.__apply_filters(result, filter)
         page.number_of_elements = result.count()
-        if page.order_by is not None:
-            order_column = getattr(self.type, page.order_by)
-            query_order = order_column.asc() if page.order_direction == OrderDirection.ASC else order_column.desc()
-            result = result.order_by(query_order)
+        result = self.__apply_ordering(result, page, joins)
         if page.size is not None and page.size >= 0:
             result = result.limit(page.size).offset(page.size * page.offset)
         page.content = result.all()
@@ -44,6 +41,21 @@ class BaseService:
         if filters:
             query = query.filter(*filters)
         return query
+    
+    def __apply_ordering(self, query, page, joins):
+        if page.order_by:
+            order_column = self.__get_order_column(page.order_by, joins)
+            query_order = order_column.asc() if page.order_direction == OrderDirection.ASC else order_column.desc()
+            query = query.order_by(query_order)
+        return query
+
+    def __get_order_column(self, order_by, joins):
+        if '.' in order_by:
+            column_name = order_by.split('.')[1]
+            for join in joins:
+                if hasattr(join, column_name):
+                    return getattr(join, column_name)
+        return getattr(self.type, order_by)
     
     def update_by_id(self, id: int, model: Any):
         record = self.filter(self.type.id == id).first()
