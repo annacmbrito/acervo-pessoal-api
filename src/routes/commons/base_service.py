@@ -20,8 +20,11 @@ class BaseService:
     def filter(self, condition: Any): 
         return self.session.query(self.type).filter(condition)
     
-    def find_all(self, page: Page, filter: Any | None = None):
+    def find_all(self, page: Page, filter: Any | None = None, joins: Any | None = None):
         result = self.session.query(self.type)
+        if joins is not None:
+            for table in joins:
+                result = result.join(table)
         if filter is not None:
             result = result.filter(*filter)
         page.number_of_elements = result.count()
