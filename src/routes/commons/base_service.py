@@ -22,9 +22,7 @@ class BaseService:
     
     def find_all(self, page: Page, filter: Any | None = None, joins: Any | None = None):
         result = self.session.query(self.type)
-        if joins is not None:
-            for table in joins:
-                result = result.join(table)
+        result = self.__apply_joins(result, joins)
         if filter is not None:
             result = result.filter(*filter)
         page.number_of_elements = result.count()
@@ -36,6 +34,12 @@ class BaseService:
             result = result.limit(page.size).offset(page.size * page.offset)
         page.content = result.all()
         return page.model_dump()
+    
+    def __apply_joins(self, query, joins):
+        if joins:
+            for table in joins:
+                query = query.join(table)
+        return query
     
     def update_by_id(self, id: int, model: Any):
         record = self.filter(self.type.id == id).first()
