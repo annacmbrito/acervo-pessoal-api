@@ -20,7 +20,7 @@ class BookService(BaseService):
         self.subcategory_service = SubcategoryService(session)
 
     def save(self, request: SaveBookRequest):
-        book = self.process_to_save(request)
+        book = self.process_to_save(None, request)
         return super().save(book)
     
     def find_by_id(self, id: int):
@@ -34,7 +34,7 @@ class BookService(BaseService):
     
     def update_by_id(self, id: int, request: SaveBookRequest):
         try:
-            book = self.process_to_save(request)
+            book = self.process_to_save(id, request)
             return super().update_by_id(id, book)
         except ValueError:
             raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Book not found")
@@ -42,47 +42,42 @@ class BookService(BaseService):
     def delete_by_id(self, id: int):
         return super().delete_by_id(id)
     
-    def process_to_save(self, request: SaveBookRequest):
+    def process_to_save(self, id: int | None, request: SaveBookRequest):
         book = request.to_model()
+        database_book = self.find_by_id(id) if id else None
 
-        if request.author:
-            author = self.author_service.filter(Author.name == request.author).first()
-            if author is None:
-                author = Author()
-                author.name = request.author
-                book.author_id = self.author_service.save(author).id
-            else:
-                book.author_id = author.id
+        def process_attribute(attribute, service, model_class):
+            request_value = getattr(request, attribute)
+            if request_value:
+                instance = service.filter(model_class.name == request_value).first()
+                
+                if (database_book and getattr(database_book, attribute) and
+                    getattr(database_book, attribute).name != request_value and
+                    len(getattr(database_book, attribute).books) <= 1):
+                    service.delete_by_id(getattr(database_book, attribute).id)
 
-        if request.language:
-            language = self.language_service.filter(Language.name == request.language).first()
-            if language is None:
-                language = Language()
-                language.name = request.language
-                book.language_id = self.language_service.save(language).id
-            else:
-                book.language_id = language.id
+                if instance is None:
+                    instance = model_class()
+                    instance.name = request_value
+                    setattr(book, f"{attribute}_id", service.save(instance).id)
+                else:
+                    setattr(book, f"{attribute}_id", instance.id)
+            elif database_book and getattr(database_book, attribute):
+                if len(getattr(database_book, attribute).books) <= 1:
+                    service.delete_by_id(getattr(database_book, attribute).id)
+                else:
+                    setattr(database_book, f"{attribute}_id", None)
 
-        if request.publisher:
-            publisher = self.publisher_service.filter(Publisher.name == request.publisher).first()
-            if publisher is None:
-                publisher = Publisher()
-                publisher.name = request.publisher
-                book.publisher_id = self.publisher_service.save(publisher).id
-            else:
-                book.publisher_id = publisher.id
-
-        if request.category:
-            category = self.category_service.filter(Category.name == request.category).first()
-            if category is None:
-                category = Category()
-                category.name = request.category
-                book.category_id = self.category_service.save(category).id
-            else:
-                book.category_id = category.id
+        process_attribute('author', self.author_service, Author)
+        process_attribute('language', self.language_service, Language)
+        process_attribute('publisher', self.publisher_service, Publisher)
+        process_attribute('category', self.category_service, Category)
 
         if request.subcategory:
             subcategory = self.subcategory_service.filter(Subcategory.name == request.subcategory and Subcategory.category_id == book.category_id).first()
+
+            if database_book and database_book.subcategory and database_book.subcategory.name != request.subcategory and len(database_book.subcategory.books) <= 1:
+                self.subcategory_service.delete_by_id(database_book.subcategory.id)
 
             if subcategory is None:
                 subcategory = Subcategory()
@@ -91,5 +86,11 @@ class BookService(BaseService):
                 book.subcategory_id = self.subcategory_service.save(subcategory).id
             else:
                 book.subcategory_id = subcategory.id
-
+        elif database_book and database_book.subcategory:
+            if len(database_book.subcategory.books) <= 1:
+                self.subcategory_service.delete_by_id(database_book.subcategory.id)
+            else:
+                database_book.subcategory_id = None
+        
+        self.session.commit()
         return book
