@@ -20,7 +20,7 @@ class BookService(BaseService):
         self.subcategory_service = SubcategoryService(session)
 
     def save(self, request: SaveBookRequest):
-        book = self.convert_to_book(request)
+        book = self.process_to_save(request)
         return super().save(book)
     
     def find_by_id(self, id: int):
@@ -34,7 +34,7 @@ class BookService(BaseService):
     
     def update_by_id(self, id: int, request: SaveBookRequest):
         try:
-            book = self.convert_to_book(request)
+            book = self.process_to_save(request)
             return super().update_by_id(id, book)
         except ValueError:
             raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Book not found")
@@ -42,7 +42,7 @@ class BookService(BaseService):
     def delete_by_id(self, id: int):
         return super().delete_by_id(id)
     
-    def convert_to_book(self, request: SaveBookRequest):
+    def process_to_save(self, request: SaveBookRequest):
         book = request.to_model()
 
         if request.author:
