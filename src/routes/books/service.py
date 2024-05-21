@@ -45,46 +45,51 @@ class BookService(BaseService):
     def convert_to_book(self, request: SaveBookRequest):
         book = request.to_model()
 
-        author = self.author_service.filter(Author.name == request.author).first()
-        if author is None:
-            author = Author()
-            author.name = request.author
-            book.author_id = self.author_service.save(author).id
-        else:
-            book.author_id = author.id
+        if request.author:
+            author = self.author_service.filter(Author.name == request.author).first()
+            if author is None:
+                author = Author()
+                author.name = request.author
+                book.author_id = self.author_service.save(author).id
+            else:
+                book.author_id = author.id
 
-        language = self.language_service.filter(Language.name == request.language).first()
-        if language is None:
-            language = Language()
-            language.name = request.language
-            book.language_id = self.language_service.save(language).id
-        else:
-            book.language_id = language.id
+        if request.language:
+            language = self.language_service.filter(Language.name == request.language).first()
+            if language is None:
+                language = Language()
+                language.name = request.language
+                book.language_id = self.language_service.save(language).id
+            else:
+                book.language_id = language.id
 
-        publisher = self.publisher_service.filter(Publisher.name == request.publisher).first()
-        if publisher is None:
-            publisher = Publisher()
-            publisher.name = request.publisher
-            book.publisher_id = self.publisher_service.save(publisher).id
-        else:
-            book.publisher_id = publisher.id
+        if request.publisher:
+            publisher = self.publisher_service.filter(Publisher.name == request.publisher).first()
+            if publisher is None:
+                publisher = Publisher()
+                publisher.name = request.publisher
+                book.publisher_id = self.publisher_service.save(publisher).id
+            else:
+                book.publisher_id = publisher.id
 
-        category = self.category_service.filter(Category.name == request.category).first()
-        if category is None:
-            category = Category()
-            category.name = request.category
-            book.category_id = self.category_service.save(category).id
-        else:
-            book.category_id = category.id
+        if request.category:
+            category = self.category_service.filter(Category.name == request.category).first()
+            if category is None:
+                category = Category()
+                category.name = request.category
+                book.category_id = self.category_service.save(category).id
+            else:
+                book.category_id = category.id
 
-        subcategory = self.subcategory_service.filter(Subcategory.name == request.subcategory and Subcategory.category_id == book.category_id).first()
+        if request.subcategory:
+            subcategory = self.subcategory_service.filter(Subcategory.name == request.subcategory and Subcategory.category_id == book.category_id).first()
 
-        if subcategory is None:
-            subcategory = Subcategory()
-            subcategory.name = request.subcategory
-            subcategory.category_id = book.category_id
-            book.subcategory_id = self.subcategory_service.save(subcategory).id
-        else:
-            book.subcategory_id = subcategory.id
+            if subcategory is None:
+                subcategory = Subcategory()
+                subcategory.name = request.subcategory
+                subcategory.category_id = book.category_id
+                book.subcategory_id = self.subcategory_service.save(subcategory).id
+            else:
+                book.subcategory_id = subcategory.id
 
         return book
