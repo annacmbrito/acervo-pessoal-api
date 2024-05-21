@@ -33,7 +33,7 @@ class BaseService:
     def __apply_joins(self, query, joins):
         if joins:
             for table in joins:
-                query = query.join(table)
+                query = query.join(table, isouter=True)
         return query
 
     def __apply_filters(self, query, filters):
