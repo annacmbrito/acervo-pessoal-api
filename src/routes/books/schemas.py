@@ -9,17 +9,17 @@ class BookStatus(Enum):
     BORROWED = 'BORROWED'
 
 class SaveBookRequest(BaseModel):
-    name: str = Field(..., min_length=3, max_length=128)
+    name: str = Field(..., min_length=1, max_length=128)
     description: str | None = Field(None)
     comment: str | None = Field(None)
     pages: int | None = Field(None, ge=0)
     rating: int = Field(0, ge=0, le=5)
     status: BookStatus = Field(BookStatus.AVAILABLE)
-    author: str | None = Field(None, min_length=3, max_length=32)
-    language: str | None = Field(None, min_length=3, max_length=32)
-    publisher: str | None = Field(None, min_length=3, max_length=32)
-    category: str | None = Field(None, min_length=3, max_length=32)
-    subcategory: str | None = Field(None, min_length=3, max_length=32)
+    author: str | None = Field(None, max_length=32)
+    language: str | None = Field(None, max_length=32)
+    publisher: str | None = Field(None, max_length=32)
+    category: str | None = Field(None, max_length=32)
+    subcategory: str | None = Field(None, max_length=32)
 
     def to_model(self):
         book = Book()
