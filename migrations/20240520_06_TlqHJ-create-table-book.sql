@@ -1,5 +1,5 @@
 -- Create table book
--- depends: 20240506_05_Ues94-create-table-subcategory
+-- depends: 20240514_01_MW1Bk-create-table-publisher
 
 CREATE TABLE IF NOT EXISTS book
 (

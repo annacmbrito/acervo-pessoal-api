@@ -1,5 +1,5 @@
 -- Create table publisher 
--- depends: 20240506_06_TlqHJ-create-table-book
+-- depends: 20240506_05_Ues94-create-table-subcategory
 
 CREATE TABLE IF NOT EXISTS publisher(
 	id SERIAL PRIMARY KEY,
