@@ -12,6 +12,7 @@ class Book(Base):
     pages = Column(Integer)
     rating = Column(Integer)
     status = Column(String(length=32))
+    image = Column(String(length=255))
     author_id = Column(Integer, ForeignKey('author.id'))
     language_id = Column(Integer, ForeignKey('language.id'))
     publisher_id = Column(Integer, ForeignKey('publisher.id'))
