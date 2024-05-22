@@ -10,6 +10,7 @@ CREATE TABLE IF NOT EXISTS book
 	rating INT,
 	pages INT,
 	status VARCHAR(32),
+	image VARCHAR(255),
 	author_id INT REFERENCES author(id),
 	language_id INT REFERENCES language(id),
 	publisher_id INT REFERENCES publisher(id),
