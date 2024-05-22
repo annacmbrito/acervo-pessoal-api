@@ -15,6 +15,7 @@ class SaveBookRequest(BaseModel):
     pages: int | None = Field(None, ge=0)
     rating: int = Field(0, ge=0, le=5)
     status: BookStatus = Field(BookStatus.AVAILABLE)
+    image: str | None = Field(None)
     author: str | None = Field(None, max_length=32)
     language: str | None = Field(None, max_length=32)
     publisher: str | None = Field(None, max_length=32)
@@ -29,6 +30,7 @@ class SaveBookRequest(BaseModel):
         book.pages = self.pages
         book.rating = self.rating
         book.status = self.status.name
+        book.image = self.image
         return book
     
 class BookFilter(BaseModel):
