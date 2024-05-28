@@ -1,5 +1,5 @@
 -- Create table book
--- depends: 20240514_01_MW1Bk-create-table-publisher
+-- depends: 20240528_01_pY8AT-create-table-image
 
 CREATE TABLE IF NOT EXISTS book
 (
@@ -15,5 +15,6 @@ CREATE TABLE IF NOT EXISTS book
 	language_id INT REFERENCES language(id),
 	publisher_id INT REFERENCES publisher(id),
 	category_id INT REFERENCES category(id),
-	subcategory_id INT REFERENCES subcategory(id)
+	subcategory_id INT REFERENCES subcategory(id),
+	image_id VARCHAR(64) REFERENCES image(id)
 );
