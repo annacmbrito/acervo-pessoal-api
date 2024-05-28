@@ -12,3 +12,6 @@ class ImageService(BaseService):
 
     def save(self, image: Image):
         return super().save(image)
+    
+    def delete_by_id(self, id: int):
+        return super().delete_by_id(id)
