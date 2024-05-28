@@ -18,9 +18,11 @@ class Book(Base):
     publisher_id = Column(Integer, ForeignKey('publisher.id'))
     category_id = Column(Integer, ForeignKey('category.id'))
     subcategory_id = Column(Integer, ForeignKey('subcategory.id'))
+    image_id = Column(String(length=32), ForeignKey('image.id'))
 
     author = relationship("Author", back_populates="books", lazy=False)
     language = relationship("Language", back_populates="books", lazy=False)
     publisher = relationship("Publisher", back_populates="books", lazy=False)
     category = relationship("Category", back_populates="books", lazy=False)
     subcategory = relationship("Subcategory", back_populates="books", lazy=False)
+    image = relationship("Image", back_populates="books", lazy=False)
