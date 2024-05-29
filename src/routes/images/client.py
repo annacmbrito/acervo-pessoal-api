@@ -31,6 +31,14 @@ class ImageKitClient:
             raise e
         except Exception as e:
             raise HTTPException(status_code=500, detail=f"An unexpected error occurred: {str(e)}")
+        
+    def delete_by_id(self, id: str):
+        try:
+            self.client.delete_file(file_id=id)
+        except HTTPException as e:
+            raise e
+        except Exception as e:
+            raise HTTPException(status_code=500, detail=f"An unexpected error occurred: {str(e)}")
     
     def convert_to_image(self, upload_response: UploadFileResult):
         image = Image()
