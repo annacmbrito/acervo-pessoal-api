@@ -74,7 +74,7 @@ class BaseService:
                     setattr(record, key, value)
             self.session.commit()
     
-    def delete_by_id(self, id: int):
+    def delete_by_id(self, id: int | str):
         record = self.filter(self.type.id == id).first()
         if record is not None:
             self.session.delete(record)
