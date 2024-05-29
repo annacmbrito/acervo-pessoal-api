@@ -14,3 +14,8 @@ router = APIRouter(
 async def save_user(file: UploadFile = File(...), session: Session = Depends(get_db_session)):
     image = await ImageKitClient().upload(file)
     return ImageService(session).save(image)
+
+@router.delete("/{id}")
+def delete_by_id(id: str, session: Session = Depends(get_db_session)):
+    ImageKitClient().delete_by_id(id)
+    ImageService(session).delete_by_id(id)
