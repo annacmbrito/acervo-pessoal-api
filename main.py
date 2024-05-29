@@ -8,6 +8,7 @@ from starlette.responses import RedirectResponse
 from src.routes.auth.main import router as auth_router
 from src.routes.authors.main import router as authors_router
 from src.routes.books.main import router as books_router
+from src.routes.images.main import router as images_router
 from src.routes.publishers.main import router as publishers_router
 from src.routes.categories.main import router as categories_router
 from src.routes.subcategories.main import router as subcategories_router
@@ -19,6 +20,7 @@ app = FastAPI()
 app.include_router(auth_router)
 app.include_router(authors_router)
 app.include_router(books_router)
+app.include_router(images_router)
 app.include_router(publishers_router)
 app.include_router(categories_router)
 app.include_router(subcategories_router)
