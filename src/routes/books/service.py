@@ -1,5 +1,7 @@
 from fastapi import HTTPException, status
 from sqlalchemy.orm import Session
+from src.routes.images.client import ImageKitClient
+from src.routes.images.service import ImageService
 from src.routes.commons.schemas import Page
 from src.routes.commons.base_service import BaseService
 from src.routes.authors.service import Author, AuthorService
@@ -18,6 +20,8 @@ class BookService(BaseService):
         self.publisher_service = PublisherService(session)
         self.category_service = CategoryService(session)
         self.subcategory_service = SubcategoryService(session)
+        self.image_service =ImageService(session)
+        self.image_client = ImageKitClient()
 
     def save(self, request: SaveBookRequest):
         book = self.process_to_save(None, request)
@@ -92,5 +96,15 @@ class BookService(BaseService):
             else:
                 database_book.subcategory_id = None
         
+        if request.image_id:
+            if database_book and database_book.image and database_book.image.id != request.image_id:
+                self.image_client.delete_by_id(database_book.image.id)
+                self.image_service.delete_by_id(database_book.image.id)
+            book.image_id = request.image_id
+        elif database_book and database_book.image:
+            self.image_client.delete_by_id(database_book.image.id)
+            self.image_service.delete_by_id(database_book.image.id)
+            database_book.image_id = None
+
         self.session.commit()
         return book
