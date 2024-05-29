@@ -15,7 +15,7 @@ class SaveBookRequest(BaseModel):
     pages: int | None = Field(None, ge=0)
     rating: int = Field(0, ge=0, le=5)
     status: BookStatus = Field(BookStatus.AVAILABLE)
-    image: str | None = Field(None)
+    image_id: str | None = Field(None)
     author: str | None = Field(None, max_length=32)
     language: str | None = Field(None, max_length=32)
     publisher: str | None = Field(None, max_length=32)
@@ -30,7 +30,7 @@ class SaveBookRequest(BaseModel):
         book.pages = self.pages
         book.rating = self.rating
         book.status = self.status.name
-        book.image = self.image
+        book.image_id = self.image_id
         return book
     
 class BookFilter(BaseModel):
@@ -44,9 +44,9 @@ class BookFilter(BaseModel):
         conditions = []
         if self.token is not None:
             conditions.append(or_(func.lower(Book.name).contains(self.token.lower()), 
-                              func.lower(Book.description).contains(self.token.lower()),
-                              func.lower(Book.comment).contains(self.token.lower()),
-                              func.lower(Author.name).contains(self.token.lower())))
+                                  func.lower(Book.description).contains(self.token.lower()),
+                                  func.lower(Book.comment).contains(self.token.lower()),
+                                  func.lower(Author.name).contains(self.token.lower())))
         if self.rating is not None:
             conditions.append(Book.rating == self.rating)
         if self.publisher_id is not None:
